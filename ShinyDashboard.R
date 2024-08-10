@@ -1,3 +1,4 @@
+###packages####
 library(tidyverse)
 library(lubridate)
 library(RColorBrewer)
@@ -5,11 +6,21 @@ library(sf)
 library(shiny)
 library(shinydashboard)
 
+theme_set(theme_bw())
+
+
+#####################
+####### prep #######
+#####################
+
+files <- list.files(pattern = "\\.csv$")
+
+df <- files %>%
+  lapply(read.csv) %>%
+  bind_rows()
+
 #turn off scientific notation for large values
 options(scipen = 999)
-
-# read in data 
-df <- read.csv("boston_crime.csv")
 
 # district groups 
 dst <- df %>%
