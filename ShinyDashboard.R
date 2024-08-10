@@ -59,6 +59,8 @@ shheatmap_data <- df %>%
   mutate(day_of_week = wday(date, label = TRUE), 
          hour = hour) %>% 
   count(year, day_of_week, hour)
+shheatmap_data <- shheatmap_data %>%
+  filter(shheatmap_data$year >= 2019)
 
 vcheatmap_data <- df %>%
   filter(!is.na(violent_crime) & violent_crime == 1) %>%  # Filter out NA and where shooting equals 1
@@ -70,7 +72,6 @@ vcheatmap_data <- df %>%
 max_count_dst <- max(dst$count, na.rm = TRUE)
 max_count_vc <- max(vc_dst$count, na.rm = TRUE)
 max_count_sh <- max(sh_dst$count, na.rm = TRUE)
-
 
 #####################
 ##### dashboard #####
@@ -104,7 +105,7 @@ ui <- fluidPage(
     tabsetPanel(
       tabPanel("Total Incidents Heatmap", plotOutput("heatPlot")),
       tabPanel("Violent Crime Heatmap", plotOutput("vcheatPlot")),
-      tabPanel("Shooting Heatmap", plotOutput("shheatPlot"))
+      tabPanel("Shootings Heatmap", plotOutput("shheatPlot"))
     )
   )
 )
@@ -179,7 +180,8 @@ server <- function(input, output) {
       geom_tile(color = "black") +
       scale_fill_gradient(low = "lightblue", high = "darkblue") +
       theme_minimal() +
-      labs(title = paste("Shooting Count by Day of the Week and Hour in", input$year), 
+      labs(title = paste("Shooting Count by Day of the Week and Hour in", input$year),
+           subtitle = "Data Unavailable Before 2019",
            x = "", 
            y = "",
            fill = "")
