@@ -189,21 +189,3 @@ server <- function(input, output) {
 # CALL THE SHINY APP #######################################
 
 shinyApp(ui = ui, server = server)
-
-
-
-
-library("rnaturalearth")
-library("rnaturalearthdata")
-
-
-
-world <- ne_countries(scale = "medium", returnclass = "sf")
-class(world)
-
-map <- read.csv("Police_Districts.csv")
-
-
-ggplot(data = world) +
-  geom_sf() +
-  geom_point(data = df, aes(x=lat, y=long), size = 4)
